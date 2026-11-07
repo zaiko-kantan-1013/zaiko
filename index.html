@@ -3018,8 +3018,8 @@ $('#btnCopyLink').onclick=async()=>{const l=$('#inviteLink').textContent;try{awa
 $('#btnRename').onclick=()=>askName('記録に残す名前を変えます。','',v=>{CONN.name=v;lsSet(CONN_KEY,CONN);renderShare();toast('名前を変えました');});
 $('#btnDisconnect').onclick=()=>confirmBox('この端末の共有をやめますか？','スプレッドシートの中身は消えません。この端末は、いまの内容の写しを持ったまま、ひとりで使う形にもどります。',()=>{CONN=null;BASE=null;lsSet(CONN_KEY,null);lsSet(BASE_KEY,null);SY={busy:false,timer:null,retry:null,ok:true,at:'',err:''};renderAll();toast('共有をやめました');});
 function initShare(){CONN=lsGet(CONN_KEY);BASE=lsGet(BASE_KEY);
-  const h=readHash();if(h){window.FROMLINK=1;history.replaceState(null,'',location.pathname+location.search);
-    if(h.u&&h.k){if(isShared()&&CONN.url===h.u&&CONN.key===h.k){toast('この端末はもうつながっています');}
+  const h=readHash();if(h){window.FROMLINK=1;
+    if(h.u&&h.k){if(isShared()&&CONN.url===h.u&&CONN.key===h.k){}
       else askName('みんなで使う在庫かんたん帳につなぎます。だれが数えたか・発注したかの記録に使う名前を入れてください。',CONN&&CONN.name||'',v=>connect(h.u,h.k,v));}}
   renderShare();if(isShared()){if(!BASE)pull(false,true);else if(pending())sync();else pull(false);}
   document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible'&&isShared()&&!$$('.modal.on').length&&!Object.keys(EDIT).length){if(pending())sync();else pull(false);}});
