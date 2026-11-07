@@ -11,10 +11,11 @@
 html{font-size:calc(20px*var(--z))}
 body{margin:0;background:var(--bg);color:var(--ink);font-family:"BIZ UDPGothic","Yu Gothic UI","Meiryo","Hiragino Sans",sans-serif;line-height:1.55;padding-bottom:calc(96px + env(safe-area-inset-bottom))}
 button,input,select{font:inherit;color:inherit}
-.top{background:var(--blue);color:#fff;padding:calc(12px + env(safe-area-inset-top)) 16px 12px;display:flex;align-items:center;gap:10px;position:sticky;top:0;z-index:20}
+.top{background:var(--blue);color:#fff;padding:calc(12px + env(safe-area-inset-top)) 16px 12px;display:flex;align-items:center;gap:10px;}
+.hdw{position:sticky;top:0;z-index:20}
 .top h1{margin:0;font-size:1.15rem;flex:1;line-height:1.3}
 .top .shop{display:block;font-size:.75rem;opacity:.9;font-weight:normal}
-.sync{display:none;align-items:center;gap:8px;flex-wrap:wrap;padding:8px 14px;font-size:.9rem;border-bottom:2px solid var(--line);background:#fff}
+.sync{display:none;align-items:center;gap:8px;flex-wrap:wrap;padding:4px 14px;font-size:.9rem;border-bottom:2px solid var(--line);background:#fff}
 .sync.on{display:flex}.sync .t{flex:1;min-width:12em}.sync.ng{background:var(--red-s);border-color:var(--red);color:var(--red);font-weight:bold}
 .sync .btn{min-height:44px;padding:4px 14px;font-size:.9rem}
 .qr{display:flex;justify-content:center;margin:10px 0}.qr svg{width:220px;height:220px;max-width:70vw;max-height:70vw}
@@ -52,6 +53,12 @@ h2{font-size:1.25rem;margin:6px 0 4px}
 .item{background:#fff;border:2px solid var(--line);border-left-width:10px;border-radius:12px;padding:10px 12px;margin-bottom:10px}
 .item.red{border-left-color:var(--red)}.item.yel{border-left-color:var(--yel-b)}.item.grn{border-left-color:var(--grn)}.item.ord{border-left-color:var(--blue)}
 .item .nm{font-weight:bold;font-size:1.05rem}
+.nmw{display:flex;align-items:center;gap:10px;min-width:0}
+.th{width:56px;height:56px;object-fit:cover;border-radius:8px;border:1px solid var(--line);flex:none;background:#fff;cursor:zoom-in}
+.hit .th{width:96px;height:96px}
+.imgbox{margin-top:6px;border:2px dashed var(--line);border-radius:10px;min-height:120px;display:flex;align-items:center;justify-content:center;background:#fff;overflow:hidden}
+.imgbox img{max-width:100%;max-height:220px;display:block}
+#bigImg{max-width:100%;max-height:70vh;display:block;margin:0 auto;border-radius:8px}
 .item .sub{color:var(--gry);font-size:.85rem}
 .pill{display:inline-block;border-radius:999px;padding:2px 12px;font-size:.85rem;font-weight:bold;white-space:nowrap}
 .pill.red{background:var(--red);color:#fff}.pill.yel{background:var(--yel-b);color:#2a1a00}.pill.grn{background:var(--grn);color:#fff}.pill.ord{background:var(--blue);color:#fff}
@@ -146,10 +153,10 @@ table.sheet td.n,table.sheet th.n{text-align:right}
 </style>
 </head>
 <body>
-<div class="top"><h1>在庫かんたん帳<span class="shop" id="shopName"></span></h1>
+<div class="hdw"><div class="top"><h1>在庫かんたん帳<span class="shop" id="shopName"></span></h1>
   <button class="btn" style="min-height:48px;padding:4px 14px;background:#fff" id="btnHelp">使い方</button></div>
 
-<div class="sync" id="sync"><span class="t" id="syncT"></span><button class="btn" id="btnPull">最新にする</button></div>
+<div class="sync" id="sync"><span class="t" id="syncT"></span><button class="btn" id="btnPull">最新にする</button></div></div>
 <div class="wrap">
   <!-- ホーム -->
   <section class="page on" id="p-home">
@@ -173,7 +180,7 @@ table.sheet td.n,table.sheet th.n{text-align:right}
   <!-- 発注 -->
   <section class="page" id="p-order">
     <h2>発注をつくる</h2>
-    <p class="hint">少なくなっている商品を、上限金額の中で自動で選びました。数は「−」「＋」で変えられます。</p>
+    <p class="hint">少なくなっている商品を、上限金額の中で自動で選びました。数は「−」「＋」で変更できます。</p>
     <div id="pending"></div>
     <div class="budget" id="budgetBox"></div>
     <div id="orderList"></div>
@@ -223,14 +230,14 @@ table.sheet td.n,table.sheet th.n{text-align:right}
         <button class="btn p w" id="btnConnect" style="margin-top:10px">つなぐ</button>
       </div>
       <div id="shareOn" style="display:none">
-        <div class="row"><button class="btn p" id="btnInvite">ほかのスマホをつなぐ</button><button class="btn" id="btnRename">名前を変える</button><button class="btn r" id="btnDisconnect">この端末の共有をやめる</button></div>
+        <div class="row"><button class="btn p" id="btnInvite">ほかのスマホをつなぐ</button><button class="btn" id="btnRename">名前を変更する</button><button class="btn r" id="btnDisconnect">この端末の共有をやめる</button></div>
       </div>
     </div>
     <h2 style="margin-top:20px">データの控え</h2>
     <div class="info">
       <p style="margin:0 0 10px" id="backupNote">データは、この端末（パソコン・スマホ）の中にだけ保存されています。端末を替えるときや念のための控えに、ファイルに保存しておけます。</p>
       <div class="row"><button class="btn" id="btnExport">控えをファイルに保存</button><button class="btn" id="btnImport">控えから元に戻す</button><input type="file" id="impFile" accept=".json" hidden></div>
-      <div class="row" style="margin-top:12px"><button class="btn r" id="btnReset">すべて消して最初から</button><button class="btn" id="btnSample">お試し用の商品50種類を入れる</button></div>
+      <div class="row" style="margin-top:12px"><button class="btn r" id="btnReset">すべて削除して最初から</button><button class="btn" id="btnSample">お試し用の商品50種類を入れる</button></div>
     </div>
   </section>
 </div>
@@ -264,6 +271,10 @@ table.sheet td.n,table.sheet th.n{text-align:right}
 <div class="modal" id="mItem"><div class="mbox">
   <h3 id="miTitle">商品を追加する</h3>
   <label class="f">商品名<input type="text" id="fName"></label>
+  <div class="f" style="margin-top:12px;font-weight:bold">商品の写真<span class="s" style="display:block;font-weight:normal">写真があると、どの商品かすぐにわかります。小さくしてから保存するので、ふつうに撮って大丈夫です。</span>
+    <div class="imgbox"><img id="fImgP" alt="" style="display:none"><span id="fImgNo" class="sub">写真はまだありません</span></div>
+    <div class="row" style="margin-top:8px"><button class="btn" id="fImgBtn" type="button">写真を撮る・選ぶ</button><button class="btn r" id="fImgDel" type="button">写真を削除する</button></div>
+    <input type="file" id="fImgIn" accept="image/*" hidden></div>
   <label class="f">バーコード（JANコード）<span class="s">商品についているバーコードの数字です。「読む」を押してカメラで読めます。2つ以上あるときは「、」で区切ります。</span>
     <span class="row" style="flex-wrap:nowrap"><input type="text" id="fJan" inputmode="numeric" style="flex:1"><button class="btn" id="fJanScan" type="button" style="margin-top:4px">読む</button></span></label>
   <label class="f">品番（わかれば）<span class="s">ディーラーさんのカタログや納品書に書いてある番号です。発注書に載ります。</span><input type="text" id="fCode"></label>
@@ -273,8 +284,13 @@ table.sheet td.n,table.sheet th.n{text-align:right}
   <label class="f">満タンの数（発注したらここまで増やす）<input type="number" inputmode="numeric" id="fFull"></label>
   <label class="f">発注の単位（何個ずつしか頼めないか）<span class="s">ケースでしか頼めない商品は、1ケースの数を入れます。わからなければ1。</span><input type="number" inputmode="numeric" id="fUnit"></label>
   <label class="f">いまの在庫の数<input type="number" inputmode="numeric" id="fQty"></label>
-  <div class="row" style="margin-top:16px"><button class="btn p" id="fSave">保存する</button><button class="btn" data-close>やめる</button><span style="flex:1"></span><button class="btn r" id="fDel">この商品を消す</button></div>
+  <div class="row" style="margin-top:16px"><button class="btn p" id="fSave">保存する</button><button class="btn" data-close>やめる</button><span style="flex:1"></span><button class="btn r" id="fDel">この商品を削除する</button></div>
 </div></div>
+
+<!-- 写真を大きく見る -->
+<div class="modal" id="mImg"><div class="mbox"><h3 id="biT"></h3><img id="bigImg" alt=""><div class="row" style="margin-top:12px"><button class="btn w" data-close>閉じる</button></div></div></div>
+<!-- お知らせ -->
+<div class="modal" id="mInfo"><div class="mbox"><h3 id="ifT"></h3><div id="ifB"></div><div class="row" style="margin-top:12px"><button class="btn p w" data-close>わかりました</button></div></div></div>
 
 <!-- 発注書 -->
 <div class="modal" id="mOrder"><div class="mbox" style="max-width:860px">
@@ -346,7 +362,7 @@ table.sheet td.n,table.sheet th.n{text-align:right}
   <ol style="padding-left:1.3em;margin:0">
     <li style="margin-bottom:10px"><b>「数える」</b>：「バーコードで数える」を押して、商品のバーコードを1個ずつカメラで読みます（読むたびに＋1）。終わったら「数えた数を保存」。週に1回くらいがおすすめです。<br><span class="hint">はじめて読むバーコードは、どの商品かを1回だけ選びます。次からは読むだけです。</span></li>
     <li style="margin-bottom:10px"><b>「いまの在庫」</b>：<span class="pill red">すぐ発注</span> <span class="pill yel">そろそろ</span> <span class="pill grn">だいじょうぶ</span> の色で、少ない商品がわかります。</li>
-    <li style="margin-bottom:10px"><b>「発注する」</b>：少ない商品を、上限金額の中で自動で選びます。数を直して「発注書をつくる」→ 送ったら「発注済みにする」。</li>
+    <li style="margin-bottom:10px"><b>「発注する」</b>：少ない商品を、上限金額の中で自動で選びます。数を修正して「発注書をつくる」→ 送ったら「発注済みにする」。</li>
     <li><b>商品が届いたら</b>：「いまの在庫」の画面で「届いた」を押すと、在庫に足されます。</li>
   </ol>
   <p class="hint" style="margin-top:12px">データはこの端末の中だけに保存されます。ときどき「商品・設定」→「控えをファイルに保存」をしておくと安心です。</p>
@@ -371,8 +387,8 @@ const days=(a,b)=>Math.round((new Date(b)-new Date(a))/86400000);
 let S=null,mem=false;
 function load(){try{S=JSON.parse(localStorage.getItem(KEY)||'null');}catch(e){mem=true;}if(!S)S=blank(true);migrate();}
 function migrate(){S.from=S.from||{};S.to=S.to||{};if(S.shop&&!S.from.name)S.from.name=S.shop;if(S.dealer&&!S.to.name)S.to.name=S.dealer;delete S.shop;delete S.dealer;S.tax=S.tax||'ex';(S.items||[]).forEach(i=>i.jans=i.jans||[]);}
-function save(){try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){if(!mem){mem=true;toast('この開き方では保存できません。控えをファイルに保存してください');}}if(typeof queueSync==='function')queueSync();}
 const uid=p=>p+Date.now().toString(36)+Math.random().toString(36).slice(2,6);
+function save(){try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){if(!mem){mem=true;toast('この開き方では保存できません。控えをファイルに保存してください');}}if(typeof queueSync==='function')queueSync();}
 function blank(sample){return {from:{},to:{},tax:'ex',budget:50000,day:25,zoom:1,items:sample?SAMPLE():[],orders:[],lastCount:null,seq:100};}
 function SAMPLE(){const L=[
 ['シャンプー・トリートメント','サロン用シャンプー 業務用 1000ml',1800,3,8,1],['シャンプー・トリートメント','サロン用トリートメント 業務用 1000g',2200,3,8,1],['シャンプー・トリートメント','カラーケア シャンプー 詰め替え',1600,2,6,1],['シャンプー・トリートメント','スキャルプ シャンプー 詰め替え',1700,2,5,1],['シャンプー・トリートメント','ヘッドスパ用 クレンジング',2400,1,3,1],['シャンプー・トリートメント','洗い流さないトリートメント（店販）',1500,3,8,1],['シャンプー・トリートメント','ホームケア シャンプー（店販）',1200,4,10,1],['シャンプー・トリートメント','ホームケア トリートメント（店販）',1300,4,10,1],
@@ -409,12 +425,12 @@ function renderHome(){const st=S.items.map(it=>({it,s:status(it)}));const c=k=>s
   $('#homeInfo').innerHTML=info;
   const f=HOMEF;const L=st.filter(x=>f?x.s===f:(x.s==='red'||x.s==='yel'||x.s==='ord')).sort((a,b)=>({red:0,yel:1,ord:2,grn:3}[a.s]-{red:0,yel:1,ord:2,grn:3}[b.s])||(a.it.qty/a.it.full-b.it.qty/b.it.full));
   $('#homeList').innerHTML=`<h2 style="margin-top:14px">${f?LABEL[f]+'の商品':'発注したほうがよい商品'}${f?' <button class="btn" style="min-height:44px;padding:2px 12px;font-size:.85rem" id="clrF">すべてに戻す</button>':''}</h2>`+
-   (L.length?L.map(({it,s})=>`<div class="item ${s}"><div class="row" style="justify-content:space-between"><span class="nm">${esc(it.name)}</span><span class="pill ${s}">${LABEL[s]}</span></div>
+   (L.length?L.map(({it,s})=>`<div class="item ${s}"><div class="row" style="justify-content:space-between"><span class="nmw">${th(it)}<span class="nm">${esc(it.name)}</span></span><span class="pill ${s}">${LABEL[s]}</span></div>
      <div class="row" style="justify-content:space-between;margin-top:4px"><span>残り <span class="big">${it.qty}</span> 個</span><span class="sub">目安 ${it.min}個 ／ 満タン ${it.full}個</span></div>
      ${s==='ord'?`<div class="sub">発注済み：${pendingQty(it.id)}個が届く予定</div>`:''}${daysLeftText(it)?`<div class="sub">${daysLeftText(it)}</div>`:''}</div>`).join(''):`<div class="empty">${f?'この色の商品はありません。':'いま発注が必要な商品はありません。'}</div>`);
   $$('#sig .sc').forEach(e=>e.onclick=()=>{HOMEF=HOMEF===e.dataset.f?null:e.dataset.f;renderHome();});
   if($('#clrF'))$('#clrF').onclick=()=>{HOMEF=null;renderHome();};
-  $$('[data-recv]').forEach(b=>b.onclick=()=>confirmBox('届いた商品を在庫に足しますか？','発注した数を、そのまま在庫に足します。数が違うときは、あとで「数える」で直してください。',()=>receive(b.dataset.recv)));
+  $$('[data-recv]').forEach(b=>b.onclick=()=>confirmBox('届いた商品を在庫に足しますか？','発注した数を、そのまま在庫に足します。数が違うときは、あとで「数える」で修正してください。',()=>receive(b.dataset.recv)));
   $$('[data-see]').forEach(b=>b.onclick=()=>showOrder(S.orders.find(o=>o.id===b.dataset.see),true));}
 let HOMEF=null;
 function receive(oid){const o=S.orders.find(x=>x.id===oid);if(!o)return;const d=today();
@@ -426,7 +442,7 @@ function receive(oid){const o=S.orders.find(x=>x.id===oid);if(!o)return;const d=
 let EDIT={};
 function renderCount(){const q=$('#cq').value.trim();const cats=[...new Set(S.items.map(i=>i.cat))];
   let h='';cats.forEach(c=>{const L=S.items.filter(i=>i.cat===c&&(!q||i.name.includes(q)));if(!L.length)return;
-    h+=`<div class="cat">${esc(c)}</div>`+L.map(it=>{const v=EDIT[it.id]??it.qty;return `<div class="item"><div class="cnt"><div><div class="nm">${esc(it.name)}</div><div class="sub">前回 ${it.qty}個 ／ 目安 ${it.min}個</div></div>
+    h+=`<div class="cat">${esc(c)}</div>`+L.map(it=>{const v=EDIT[it.id]??it.qty;return `<div class="item"><div class="cnt"><div class="nmw">${th(it)}<div><div class="nm">${esc(it.name)}</div><div class="sub">前回 ${it.qty}個 ／ 目安 ${it.min}個</div></div></div>
       <div class="stepper"><button data-m="${it.id}" aria-label="へらす">−</button><input type="number" inputmode="numeric" min="0" value="${v}" data-v="${it.id}" class="${EDIT[it.id]!==undefined&&EDIT[it.id]!==it.qty?'chg':''}"><button data-p="${it.id}" aria-label="ふやす">＋</button></div></div></div>`;}).join('');});
   $('#countList').innerHTML=h||'<div class="empty">商品がありません。</div>';
   $$('#countList [data-m]').forEach(b=>b.onclick=()=>setE(b.dataset.m,(EDIT[b.dataset.m]??cur(b.dataset.m))-1));
@@ -436,7 +452,7 @@ function renderCount(){const q=$('#cq').value.trim();const cats=[...new Set(S.it
 const cur=id=>S.items.find(i=>i.id===id).qty;
 function setE(id,v){v=Math.max(0,v);EDIT[id]=v;const i=$(`#countList [data-v="${id}"]`);if(i){i.value=v;i.classList.toggle('chg',v!==cur(id));}updBar();}
 function updBar(){const n=Object.keys(EDIT).filter(id=>EDIT[id]!==cur(id)).length;const on=PAGE==='count';
-  $('#countBar').classList.toggle('on',on);$('#countBarT').textContent=n?`${n}品の数を変えました`:'数が合っていれば、そのまま保存してください';}
+  $('#countBar').classList.toggle('on',on);$('#countBarT').textContent=n?`${n}品の数を変更しました`:'数が合っていれば、そのまま保存してください';}
 $('#btnSaveCount').onclick=()=>{if(SCANNED.size){const un=S.items.filter(i=>!SCANNED.has(i.id)&&EDIT[i.id]===undefined);
     if(un.length){$('#unB').textContent=`バーコードで読まなかった商品が${un.length}品あります（${un.slice(0,3).map(i=>i.name).join('、')}${un.length>3?' など':''}）。この商品の数はどうしますか？`;
       $('#unKeep').onclick=()=>{$('#mUnscan').classList.remove('on');doSaveCount();};$('#unZero').onclick=()=>{un.forEach(i=>EDIT[i.id]=0);$('#mUnscan').classList.remove('on');doSaveCount();};
@@ -444,7 +460,7 @@ $('#btnSaveCount').onclick=()=>{if(SCANNED.size){const un=S.items.filter(i=>!SCA
 function doSaveCount(){const d=today();let n=0;
   S.items.forEach(it=>{const v=EDIT[it.id]??it.qty;if(v!==it.qty)n++;it.qty=v;it.hist=it.hist||[];const last=it.hist[it.hist.length-1];
     if(last&&last.d===d){last.q=v;}else it.hist.push({d,q:v});if(it.hist.length>24)it.hist=it.hist.slice(-24);});
-  S.lastCount=d;EDIT={};SCANNED=new Set();save();renderAll();go('home');toast(n?`保存しました（${n}品の数を変えました）`:'保存しました（数はそのままです）');}
+  S.lastCount=d;EDIT={};SCANNED=new Set();save();renderAll();go('home');toast(n?`保存しました（${n}品の数を変更しました）`:'保存しました（数はそのままです）');}
 $('#cq').oninput=renderCount;
 
 /* ===== 画面：発注 ===== */
@@ -461,7 +477,7 @@ function renderOrder(){if(!PLAN)makePlan();const I=id=>S.items.find(i=>i.id===id
   const act=PLAN.lines.filter(l=>l.on&&l.qty>0);const total=act.reduce((s,l)=>s+l.qty*I(l.id).price,0);const pct=S.budget?Math.min(100,total/S.budget*100):0;const over=total>S.budget;
   $('#budgetBox').innerHTML=`<div class="row" style="justify-content:space-between"><b>合計 <span class="big" style="color:${over?'var(--red)':'var(--ink)'}">${yen(total)}</span></b><span>上限 ${yen(S.budget)}</span></div>
     <div class="meter"><i class="${over?'over':''}" style="width:${pct}%"></i></div><div style="font-weight:bold;color:${over?'var(--red)':'var(--grn)'}">${over?`上限を ${yen(total-S.budget)} こえています。数をへらしてください。`:`あと ${yen(S.budget-total)} 使えます`}</div>`;
-  $('#orderList').innerHTML=PLAN.lines.length?PLAN.lines.map((l,k)=>{const it=I(l.id);const u=Math.max(1,it.unit||1);return `<div class="item ${l.s} ${l.on&&l.qty>0?'':'off'}"><div class="row" style="justify-content:space-between"><span class="nm">${esc(it.name)}</span><span class="pill ${l.s}">${LABEL[l.s]}</span></div>
+  $('#orderList').innerHTML=PLAN.lines.length?PLAN.lines.map((l,k)=>{const it=I(l.id);const u=Math.max(1,it.unit||1);return `<div class="item ${l.s} ${l.on&&l.qty>0?'':'off'}"><div class="row" style="justify-content:space-between"><span class="nmw">${th(it)}<span class="nm">${esc(it.name)}</span></span><span class="pill ${l.s}">${LABEL[l.s]}</span></div>
      <div class="sub">いま ${it.qty}個 → 満タン ${it.full}個${u>1?`（${u}個単位）`:''}／ 1個 ${yen(it.price)}</div>
      <div class="ol" style="margin-top:6px"><div class="stepper"><button data-om="${k}">−</button><input type="number" inputmode="numeric" value="${l.qty}" data-ov="${k}"><button data-op="${k}">＋</button></div><div class="money">${yen(l.qty*it.price)}</div></div></div>`;}).join(''):'<div class="empty">いま発注が必要な商品はありません。</div>';
   $('#orderRest').innerHTML=PLAN.rest.length?`<h2 style="margin-top:18px">上限金額に入らなかった商品</h2><p class="hint">必要なら「入れる」を押してください（合計が上限をこえることがあります）。</p>`+PLAN.rest.map((r,k)=>{const it=I(r.id);return `<div class="item ${r.s}"><div class="row" style="justify-content:space-between"><span class="nm">${esc(it.name)}</span><button class="btn" data-add="${k}" style="min-height:48px">入れる</button></div><div class="sub">いま ${it.qty}個 ／ ${r.qty}個で ${yen(r.qty*it.price)}</div></div>`;}).join(''):'';
@@ -512,35 +528,57 @@ $('#btnDoneOrder').onclick=()=>{if($('#oKeep').checked){S.from={...SHOW.from};S.
 /* ===== 画面：商品・設定 ===== */
 function renderItems(){const q=$('#iq').value.trim();const cats=[...new Set(S.items.map(i=>i.cat))];let h='';
   cats.forEach(c=>{const L=S.items.filter(i=>i.cat===c&&(!q||i.name.includes(q)));if(!L.length)return;
-    h+=`<div class="cat">${esc(c)}（${L.length}）</div>`+L.map(it=>`<div class="item"><div class="row" style="justify-content:space-between"><span class="nm">${esc(it.name)}</span><button class="btn" data-e="${it.id}" style="min-height:48px">直す</button></div><div class="sub">${it.code?'品番 '+esc(it.code)+' ／ ':''}単価 ${yen(it.price)} ／ 目安 ${it.min}個 ／ 満タン ${it.full}個${it.unit>1?` ／ ${it.unit}個単位`:''} ／ いま ${it.qty}個</div></div>`).join('');});
+    h+=`<div class="cat">${esc(c)}（${L.length}）</div>`+L.map(it=>`<div class="item"><div class="row" style="justify-content:space-between"><span class="nmw">${th(it)}<span class="nm">${esc(it.name)}</span></span><button class="btn" data-e="${it.id}" style="min-height:48px">修正する</button></div><div class="sub">${it.code?'品番 '+esc(it.code)+' ／ ':''}単価 ${yen(it.price)} ／ 目安 ${it.min}個 ／ 満タン ${it.full}個${it.unit>1?` ／ ${it.unit}個単位`:''} ／ いま ${it.qty}個</div></div>`).join('');});
   $('#itemList').innerHTML=h||'<div class="empty">商品がありません。「＋ 商品を追加する」から入れてください。</div>';
   $$('#itemList [data-e]').forEach(b=>b.onclick=()=>openItem(b.dataset.e));
   FF.forEach(([id,o,k])=>$('#'+id).value=S[o][k]||'');$('#sTax').value=S.tax;$('#sBudget').value=S.budget;$('#sDay').value=S.day;$('#sZoom').value=String(S.zoom||1);
   $('#catList').innerHTML=cats.map(c=>`<option value="${esc(c)}">`).join('');}
 $('#iq').oninput=renderItems;
+/* ===== 商品の写真 ===== */
+const IMGKEY=KEY+'.img';let IMG={},EIMG;
+try{IMG=JSON.parse(localStorage.getItem(IMGKEY)||'{}')||{};}catch(e){IMG={};}
+function saveImg(){try{localStorage.setItem(IMGKEY,JSON.stringify(IMG));}catch(e){toast('この端末には、これ以上写真を保存できません');}}
+function imgOf(it){const x=it&&it.imgv&&IMG[it.id];return x&&x.v===it.imgv?x.d:'';}
+function th(it){const d=imgOf(it);return d?`<img class="th" src="${d}" alt="" data-big="${it.id}">`:'';}
+function showEImg(d){$('#fImgP').style.display=d?'':'none';$('#fImgP').src=d||'';$('#fImgNo').style.display=d?'none':'';$('#fImgDel').style.display=d?'':'none';}
+$('#fImgBtn').onclick=()=>$('#fImgIn').click();
+$('#fImgDel').onclick=()=>{EIMG=null;showEImg('');toast('写真を外しました。「保存する」で確定します');};
+$('#fImgIn').onchange=async e=>{const f=e.target.files[0];e.target.value='';if(!f)return;
+  try{const d=await shrink(f);EIMG=d;showEImg(d);toast('写真を入れました。「保存する」で確定します');}catch(err){toast('この写真は読み込めませんでした');}};
+/* 写真を小さくする（長い辺240px・JPEG）。スプレッドシートの1マスに入る大きさにする */
+function shrink(file){return new Promise((ok,ng)=>{const u=URL.createObjectURL(file),im=new Image();
+  im.onload=()=>{URL.revokeObjectURL(u);let W=im.naturalWidth,H=im.naturalHeight;const k=Math.min(1,240/Math.max(W,H));W=Math.round(W*k);H=Math.round(H*k);
+    const c=document.createElement('canvas');c.width=W;c.height=H;const g=c.getContext('2d');g.fillStyle='#fff';g.fillRect(0,0,W,H);g.drawImage(im,0,0,W,H);
+    let q=.72,d=c.toDataURL('image/jpeg',q);while(d.length>40000&&q>.3){q-=.1;d=c.toDataURL('image/jpeg',q);}ok(d);};
+  im.onerror=()=>{URL.revokeObjectURL(u);ng();};im.src=u;});}
+document.addEventListener('click',e=>{const t=e.target.closest('[data-big]');if(!t)return;e.stopPropagation();const it=S.items.find(i=>i.id===t.dataset.big);if(!it)return;
+  $('#biT').textContent=it.name;$('#bigImg').src=imgOf(it);$('#mImg').classList.add('on');},true);
+function infoBox(t,html){$('#ifT').textContent=t;$('#ifB').innerHTML=html;$('#mInfo').classList.add('on');}
 const FF=[['sFromName','from','name'],['sFromPerson','from','person'],['sFromZip','from','zip'],['sFromAddr','from','addr'],['sFromTel','from','tel'],['sFromFax','from','fax'],['sToName','to','name'],['sToBranch','to','branch'],['sToPerson','to','person'],['sToTel','to','tel'],['sToFax','to','fax']];
 let EID=null,AFTERNEW=null;
 function openItem(id){EID=id;const it=id?S.items.find(i=>i.id===id):{code:'',name:'',cat:'',price:'',min:2,full:6,unit:1,qty:0};
-  $('#miTitle').textContent=id?'商品を直す':'商品を追加する';$('#fName').value=it.name;$('#fCode').value=it.code||'';$('#fJan').value=(it.jans||[]).join('、');$('#fCat').value=it.cat;$('#fPrice').value=it.price;$('#fMin').value=it.min;$('#fFull').value=it.full;$('#fUnit').value=it.unit||1;$('#fQty').value=it.qty;
-  $('#fDel').style.display=id?'':'none';$('#mItem').classList.add('on');}
+  $('#miTitle').textContent=id?'商品を修正する':'商品を追加する';$('#fName').value=it.name;$('#fCode').value=it.code||'';$('#fJan').value=(it.jans||[]).join('、');$('#fCat').value=it.cat;$('#fPrice').value=it.price;$('#fMin').value=it.min;$('#fFull').value=it.full;$('#fUnit').value=it.unit||1;$('#fQty').value=it.qty;
+  $('#fDel').style.display=id?'':'none';EIMG=undefined;showEImg(id&&imgOf(it));$('#mItem').classList.add('on');}
 $('#btnAdd').onclick=()=>openItem(null);
 $('#fSave').onclick=()=>{const n=$('#fName').value.trim();if(!n){toast('商品名を入れてください');return;}
   const jans=[...new Set($('#fJan').value.split(/[、,\s]+/).map(x=>normJan(x)).filter(Boolean))];
   const dup=jans.find(j=>S.items.some(i=>i.id!==EID&&(i.jans||[]).includes(j)));if(dup){toast(`バーコード ${dup} は、ほかの商品に登録されています`);return;}
   const v={jans,name:n,code:$('#fCode').value.trim(),cat:$('#fCat').value.trim()||'その他',price:+$('#fPrice').value||0,min:+$('#fMin').value||0,full:+$('#fFull').value||1,unit:+$('#fUnit').value||1,qty:+$('#fQty').value||0};
   if(v.full<=v.min){toast('「満タンの数」は「発注の目安」より大きくしてください');return;}
+  const NEWID=EID||uid('i');
+  if(EIMG!==undefined){if(EIMG===null){delete IMG[NEWID];v.imgv='';}else{const pv=uid('p');IMG[NEWID]={v:pv,d:EIMG};v.imgv=pv;}saveImg();}
   if(EID){const it=S.items.find(i=>i.id===EID);const chg=it.qty!==v.qty;Object.assign(it,v);if(chg){it.hist=it.hist||[];it.hist.push({d:today(),q:v.qty});}}
-  else{const nid=uid('i');S.items.push({id:nid,...v,hist:[{d:today(),q:v.qty}]});if(AFTERNEW){AFTERNEW(nid);}}AFTERNEW=null;
+  else{const nid=NEWID;S.items.push({id:nid,...v,hist:[{d:today(),q:v.qty}]});if(AFTERNEW){AFTERNEW(nid);}}AFTERNEW=null;
   save();PLAN=null;$('#mItem').classList.remove('on');$('#mItem').style.zIndex='';renderAll();if($('#mScan').classList.contains('on'))renderSession();toast('保存しました');};
-$('#fDel').onclick=()=>confirmBox('この商品を消しますか？','消した商品は元に戻せません。',()=>{S.items=S.items.filter(i=>i.id!==EID);save();PLAN=null;$('#mItem').classList.remove('on');renderAll();toast('消しました');});
+$('#fDel').onclick=()=>confirmBox('この商品を削除しますか？','削除した商品は元に戻せません。',()=>{S.items=S.items.filter(i=>i.id!==EID);delete IMG[EID];saveImg();save();PLAN=null;$('#mItem').classList.remove('on');renderAll();toast('削除しました');});
 $('#btnSaveSet').onclick=()=>{FF.forEach(([id,o,k])=>S[o][k]=$('#'+id).value.trim());S.tax=$('#sTax').value;S.budget=+$('#sBudget').value||0;S.day=Math.min(31,Math.max(1,+$('#sDay').value||25));S.zoom=+$('#sZoom').value||1;
   save();PLAN=null;applyZoom();renderAll();toast('設定を保存しました');};
 function applyZoom(){document.documentElement.style.setProperty('--z',S.zoom||1);$('#shopName').textContent=S.from.name||'';}
-$('#btnExport').onclick=()=>{const b=new Blob([JSON.stringify({kind:'zaikoKantan',v:1,data:S})],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=`在庫の控え_${today()}.json`;document.body.appendChild(a);a.click();setTimeout(()=>a.remove(),500);toast('控えを保存しました');};
+$('#btnExport').onclick=()=>{const b=new Blob([JSON.stringify({kind:'zaikoKantan',v:1,data:S,img:IMG})],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=`在庫の控え_${today()}.json`;document.body.appendChild(a);a.click();setTimeout(()=>a.remove(),500);toast('控えを保存しました');};
 $('#btnImport').onclick=()=>$('#impFile').click();
 $('#impFile').onchange=async e=>{const f=e.target.files[0];if(!f)return;try{const j=JSON.parse(await f.text());if(j.kind!=='zaikoKantan')throw 0;
-  confirmBox('控えから元に戻しますか？',`いまのデータは、控え（${f.name}）の中身に置きかわります。`,()=>{S=j.data;migrate();save();PLAN=null;EDIT={};applyZoom();renderAll();toast('元に戻しました');});}catch(err){toast('このファイルは読み込めません');}e.target.value='';};
-$('#btnReset').onclick=()=>confirmBox('すべて消して最初からにしますか？','商品も、数えた記録も、発注の記録も消えます。元に戻せません。'+(isShared()?'みんなで使っているスプレッドシートの中身も消えます。':''),()=>{S=blank(false);save();PLAN=null;EDIT={};applyZoom();renderAll();toast('すべて消しました');});
+  confirmBox('控えから元に戻しますか？',`いまのデータは、控え（${f.name}）の中身に置きかわります。`,()=>{S=j.data;migrate();if(j.img){IMG=j.img;saveImg();}save();PLAN=null;EDIT={};applyZoom();renderAll();toast('元に戻しました');});}catch(err){toast('このファイルは読み込めません');}e.target.value='';};
+$('#btnReset').onclick=()=>confirmBox('すべて削除して最初からにしますか？','商品も、数えた記録も、発注の記録も削除されます。元に戻せません。'+(isShared()?'みんなで使っているスプレッドシートの中身も削除されます。':''),()=>{S=blank(false);save();PLAN=null;EDIT={};applyZoom();renderAll();toast('すべて削除しました');});
 $('#btnSample').onclick=()=>confirmBox('お試し用の商品を入れますか？','いまの商品は、お試し用の50種類に置きかわります。'+(isShared()?'みんなで使っているスプレッドシートの商品も置きかわります。':''),()=>{const keep={from:S.from,to:S.to,tax:S.tax,budget:S.budget,day:S.day,zoom:S.zoom};S=blank(true);Object.assign(S,keep);S.lastCount=today();save();PLAN=null;EDIT={};renderAll();toast('お試し用の商品を入れました');});
 $('#btnPrintSheet').onclick=()=>{const cats=[...new Set(S.items.map(i=>i.cat))];
   $('#printArea').innerHTML=`<h1>棚卸し用紙</h1><p>${esc(S.from.name||'')}　数えた日：　　月　　日　　数えた人：</p><table class="sheet"><tr><th>分類</th><th>商品名</th><th class="n">前回</th><th class="n">目安</th><th class="n" style="width:22%">今回の数</th></tr>`+
@@ -586,7 +624,7 @@ function onCode(raw){const c=normJan(raw);if(!validJan(c))return;const now=Date.
 function countHit(it,fromScan){const id=it.id;
   if(fromScan){if(!SCANNED.has(id)){SCANNED.add(id);EDIT[id]=SC.sub==='plus'?1:(EDIT[id]??0);}else if(SC.sub==='plus')EDIT[id]=(EDIT[id]||0)+1;}
   const v=EDIT[id]??it.qty;
-  $('#scResult').innerHTML=`<div class="hit"><div class="nm">${esc(it.name)}</div>
+  $('#scResult').innerHTML=`<div class="hit"><div class="nmw">${th(it)}<div class="nm">${esc(it.name)}</div></div>
     <div class="row" style="justify-content:space-between;align-items:flex-end"><div><div class="sub">今回の数</div><div class="cntbig" id="hitN">${v}<span style="font-size:1.2rem"> 個</span></div></div><div class="sub" style="text-align:right">前回 ${it.qty}個<br>目安 ${it.min}個</div></div>
     <div class="stepper" style="margin-top:8px"><button id="hitM">−</button><input type="number" inputmode="numeric" id="hitV" value="${v}"><button id="hitP">＋</button></div>
     ${SC.sub==='input'?'<p class="hint" style="margin:6px 0 0">数を入れたら、次の商品のバーコードを読んでください。</p>':''}</div>`;
@@ -2945,11 +2983,11 @@ function fromServer(r){const o={items:r.items||[],orders:r.orders||[]};SKEYS.for
 function diffOps(A,B){const ops=[];
   const bi=new Map((B.items||[]).map(i=>[i.id,i])),ai=new Set((A.items||[]).map(i=>i.id));
   (A.items||[]).forEach(it=>{const b=bi.get(it.id);if(!b){ops.push({t:'item',id:it.id,f:clone(it)});return;}
-    const f={};Object.keys(it).forEach(k=>{if(J(it[k])!==J(b[k]))f[k]=clone(it[k]);});if(Object.keys(f).length)ops.push({t:'item',id:it.id,f});});
-  (B.items||[]).forEach(b=>{if(!ai.has(b.id))ops.push({t:'item',id:b.id,f:null});});
+    const f={};Object.keys(it).forEach(k=>{if(J(it[k])!==J(b[k]))f[k]=clone(it[k]);});if(Object.keys(f).length)ops.push({t:'item',id:it.id,f,bv:b._v});});
+  (B.items||[]).forEach(b=>{if(!ai.has(b.id))ops.push({t:'item',id:b.id,f:null,bv:b._v});});
   const bo=new Map((B.orders||[]).map(o=>[o.id,o])),ao=new Set((A.orders||[]).map(o=>o.id));
-  (A.orders||[]).forEach(o=>{const b=bo.get(o.id);if(!b||J(o)!==J(b))ops.push({t:'order',id:o.id,f:clone(o)});});
-  (B.orders||[]).forEach(b=>{if(!ao.has(b.id))ops.push({t:'order',id:b.id,f:null});});
+  (A.orders||[]).forEach(o=>{const b=bo.get(o.id);if(!b||J(o)!==J(b))ops.push({t:'order',id:o.id,f:clone(o),bv:b?b._v:undefined});});
+  (B.orders||[]).forEach(b=>{if(!ao.has(b.id))ops.push({t:'order',id:b.id,f:null,bv:b._v});});
   const f={};SKEYS.forEach(k=>{if(A[k]!==undefined&&J(A[k])!==J(B[k]))f[k]=clone(A[k]);});if(Object.keys(f).length)ops.push({t:'set',f});
   return ops;}
 /* 変更を、ある状態に当てる（サーバーと同じ考え方） */
@@ -2965,22 +3003,23 @@ function adopt(server,localOps){const local={zoom:S.zoom};const st=applyOps(clon
   S=Object.assign(blank(false),st,local);migrate();BASE=clone(server);lsSet(BASE_KEY,BASE);
   try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){}
   const busyUI=$$('.modal.on').length>0;if(!busyUI)renderAll();else renderShare();}
-async function call(a,ops){const r=await fetch(CONN.url,{method:'POST',body:JSON.stringify({a,k:CONN.key,by:CONN.name||'',ops:ops||[]})});
+async function call(a,ops,ids){const r=await fetch(CONN.url,{method:'POST',body:JSON.stringify({a,k:CONN.key,by:CONN.name||'',ops:ops||[],ids:ids||[]})});
   if(!r.ok)throw new Error('http');const j=await r.json();if(!j.ok){const e=new Error(j.err||'ng');e.code=j.err;throw e;}return j;}
 function queueSync(){if(!isShared())return;renderShare();clearTimeout(SY.timer);SY.timer=setTimeout(sync,500);}
 async function sync(){if(!isShared())return;if(SY.busy){SY.again=true;return;}
   const ops=diffOps(sharedPart(S),BASE||{items:[],orders:[]});if(!ops.length){renderShare();return;}
   SY.busy=true;SY.again=false;const sent=sharedPart(S);renderShare();
+  ops.forEach(op=>{if(op.t==='item'&&op.f&&op.f.imgv&&IMG[op.id]&&IMG[op.id].v===op.f.imgv)op.img=IMG[op.id].d;});
   try{const r=await call('save',ops);const late=diffOps(sharedPart(S),sent);SY.ok=true;SY.err='';SY.at=r.at;clearTimeout(SY.retry);
-    adopt(fromServer(r),late);SY.busy=false;if(late.length||SY.again)queueSync();}
+    adopt(fromServer(r),late);SY.busy=false;if(late.length||SY.again)queueSync();showConflicts(r.conflicts);fetchImgs();}
   catch(e){SY.busy=false;SY.ok=false;SY.err=e.code||'net';renderShare();clearTimeout(SY.retry);if(SY.err!=='key')SY.retry=setTimeout(sync,30000);}
   renderShare();}
 async function pull(showMsg,fresh){if(!isShared()||SY.busy)return;SY.busy=true;renderShare();
   try{const r=await call('load');const pend=fresh||!BASE?[]:diffOps(sharedPart(S),BASE);SY.ok=true;SY.err='';SY.at=r.at;SY.busy=false;
-    adopt(fromServer(r),pend);if(pend.length)queueSync();if(showMsg)toast('最新にしました');}
+    adopt(fromServer(r),pend);if(pend.length)queueSync();if(showMsg)toast('最新にしました');fetchImgs();}
   catch(e){SY.busy=false;SY.ok=false;SY.err=e.code||'net';if(showMsg)toast(errText());}renderShare();}
 function pending(){return isShared()&&BASE?diffOps(sharedPart(S),BASE).length:0;}
-function errText(){return SY.err==='key'?'合言葉が違うか、変わりました。「商品・設定」でつなぎ直してください':SY.err==='setup'?'スプレッドシートの準備（はじめに実行）がまだのようです':SY.err==='busy'?'ほかの人が保存中でした。少しして自動でもう一度送ります':'インターネットにつながらないため、まだ送れていません。つながると自動で送ります';}
+function errText(){return SY.err==='key'?'合言葉が違うか、変更されました。「商品・設定」でつなぎ直してください':SY.err==='setup'?'スプレッドシートの準備（はじめに実行）がまだのようです':SY.err==='busy'?'ほかの人が保存中でした。少しして自動でもう一度送ります':'インターネットにつながらないため、まだ送れていません。つながると自動で送ります';}
 function renderShare(){const bar=$('#sync');if(!bar)return;const on=isShared();bar.classList.toggle('on',on);
   if(on){const n=pending();bar.classList.toggle('ng',!SY.ok);
     $('#syncT').textContent=!SY.ok?errText():SY.busy?'スプレッドシートとやりとりしています…':n?'送る準備をしています…':`みんなで共有中（${CONN.name||'名前なし'}）・${SY.at?SY.at.slice(5).replace('-','/')+' に最新':'つないでいます'}`;
@@ -3003,7 +3042,7 @@ async function connect(url,key,name,quiet){url=(url||'').trim();key=(key||'').tr
     $$('#mConfirm [data-close]').forEach(b=>b.addEventListener('click',onceEmpty));
     function onceEmpty(){$$('#mConfirm [data-close]').forEach(b=>b.removeEventListener('click',onceEmpty));if(!BASE)adopt(sv,[]);}
     BASE=null;renderShare();return true;}
-  adopt(sv,[]);if(!quiet)toast(mine&&sv.items.length?'つなぎました。スプレッドシートの内容を表示しています':'つなぎました');return true;}
+  adopt(sv,[]);fetchImgs();if(!quiet)toast(mine&&sv.items.length?'つなぎました。スプレッドシートの内容を表示しています':'つなぎました');return true;}
 function inviteLink(){const c=btoa(unescape(encodeURIComponent(JSON.stringify({u:CONN.url,k:CONN.key})))).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');
   return location.origin+location.pathname+'#c='+c;}
 function readHash(){const m=location.hash.match(/^#c=([\w-]+)/);if(!m)return null;try{const b=m[1].replace(/-/g,'+').replace(/_/g,'/');return JSON.parse(decodeURIComponent(escape(atob(b))));}catch(e){return null;}}
@@ -3015,8 +3054,8 @@ $('#btnInvite').onclick=()=>{const l=inviteLink();$('#inviteLink').textContent=l
   try{const q=qrcode(0,'M');q.addData(l);q.make();$('#qrBox').innerHTML=q.createSvgTag({cellSize:4,margin:4,scalable:true});}catch(e){$('#qrBox').textContent='（QRコードをつくれませんでした。リンクをコピーして送ってください）';}
   $('#mInvite').classList.add('on');};
 $('#btnCopyLink').onclick=async()=>{const l=$('#inviteLink').textContent;try{await navigator.clipboard.writeText(l);toast('リンクをコピーしました');}catch(e){const r=document.createRange();r.selectNodeContents($('#inviteLink'));const s=getSelection();s.removeAllRanges();s.addRange(r);toast('リンクを選びました。長押しでコピーしてください');}};
-$('#btnRename').onclick=()=>askName('記録に残す名前を変えます。','',v=>{CONN.name=v;lsSet(CONN_KEY,CONN);renderShare();toast('名前を変えました');});
-$('#btnDisconnect').onclick=()=>confirmBox('この端末の共有をやめますか？','スプレッドシートの中身は消えません。この端末は、いまの内容の写しを持ったまま、ひとりで使う形にもどります。',()=>{CONN=null;BASE=null;lsSet(CONN_KEY,null);lsSet(BASE_KEY,null);SY={busy:false,timer:null,retry:null,ok:true,at:'',err:''};renderAll();toast('共有をやめました');});
+$('#btnRename').onclick=()=>askName('記録に残す名前を変更します。','',v=>{CONN.name=v;lsSet(CONN_KEY,CONN);renderShare();toast('名前を変更しました');});
+$('#btnDisconnect').onclick=()=>confirmBox('この端末の共有をやめますか？','スプレッドシートの中身は削除されません。この端末は、いまの内容の写しを持ったまま、ひとりで使う形にもどります。',()=>{CONN=null;BASE=null;lsSet(CONN_KEY,null);lsSet(BASE_KEY,null);SY={busy:false,timer:null,retry:null,ok:true,at:'',err:''};renderAll();toast('共有をやめました');});
 function initShare(){CONN=lsGet(CONN_KEY);BASE=lsGet(BASE_KEY);
   const h=readHash();if(h){window.FROMLINK=1;
     if(h.u&&h.k){if(isShared()&&CONN.url===h.u&&CONN.key===h.k){}
@@ -3025,6 +3064,17 @@ function initShare(){CONN=lsGet(CONN_KEY);BASE=lsGet(BASE_KEY);
   document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible'&&isShared()&&!$$('.modal.on').length&&!Object.keys(EDIT).length){if(pending())sync();else pull(false);}});
   setInterval(()=>{if(document.visibilityState==='visible'&&isShared()&&!SY.busy&&!$$('.modal.on').length&&!Object.keys(EDIT).length&&PAGE==='home'&&!pending())pull(false);},120000);
   window.addEventListener('online',()=>{if(isShared())sync();});}
+
+/* ほかの人が先に変更していたとき */
+function showConflicts(c){if(!c||!c.length)return;$('#toast').classList.remove('on');
+  infoBox('ほかの人が先に変更していました','<p>次の内容は、あなたが保存する前に、ほかの人が変更していました。<b>あなたの変更は保存せず、いまの内容を表示しています。</b></p><ul>'+
+    c.map(x=>`<li>${esc(x.name||'')}（${esc(x.by||'ほかの人')}さんが ${esc((x.at||'').slice(11))} に変更）</li>`).join('')+'</ul><p>必要なら、いまの内容を見てから、もう一度入力してください。</p>');}
+/* 写真をもらう（まだ持っていない・古いものだけ） */
+async function fetchImgs(){if(!isShared())return;const live=new Set(S.items.map(i=>i.id));let ch=false;
+  Object.keys(IMG).forEach(id=>{if(!live.has(id)){delete IMG[id];ch=true;}});
+  const need=S.items.filter(i=>i.imgv&&(!IMG[i.id]||IMG[i.id].v!==i.imgv)).map(i=>i.id);
+  for(let k=0;k<need.length;k+=15){try{const r=await call('img',[],need.slice(k,k+15));Object.assign(IMG,r.imgs||{});ch=true;}catch(e){break;}}
+  if(ch){saveImg();if(!$$('.modal.on').length)renderAll();}}
 
 load();if(!S.lastCount&&S.items.length&&S.items[0].hist&&S.items[0].hist.length>1)S.lastCount=today();
 renderAll();initShare();
